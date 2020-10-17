@@ -16,18 +16,31 @@ with open(budget_data) as csvfile:
     net_profit = 0
     
     #create a list for storing the profit differences
-    running_profit = 0
-    
+    running_profit =[]
+    running_profit_difference = 0
+    running_profit_1 = 0
+    running_profit_2 = 0
     #Skip header row
     csv_header = next(csvreader, None)
 
     #Perform actions on each row
     for row in csvreader:
         months_count += 1
-        net_profit += row[1]
-        running_profit += row[1]
+        net_profit += int(row[1])
+        
+        #average profit changes, add to list
+        running_profit_2 = running_profit_1
+        running_profit_1 = int(row[1])
+        running_profit_difference = running_profit_1 - running_profit_2
+        running_profit.append(int(running_profit_difference))
 
-    average_change = running_profit / (months_count - 1)
+#finish up calculating running profit average, remove the first list item, sum all items in the list and divide by number of months    
+    running_profit.pop(0)
+    running_profit_total = sum(running_profit)    
+    average_change = running_profit_total / (months_count - 1)
+
+
+
     
     print(months_count)
     print(net_profit)
