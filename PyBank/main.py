@@ -39,9 +39,21 @@ with open(budget_data) as csvfile:
     running_profit_total = sum(running_profit)    
     average_change = running_profit_total / (months_count - 1)
 
+#greatest increase / decrease if statement
+    max_profit = int(max(running_profit))
+    min_profit = int(min(running_profit))
+    value = row[1]
+    max_profit_month = 'unknown'
+    min_profit_month = 'unknown'
 
-
+    for row in csvreader: 
+        if value == max_profit:
+            max_profit_month = row[0]
+        elif value == min_profit:
+            min_profit_month = row[0]
     
     print(months_count)
     print(net_profit)
     print(average_change)
+    print(max_profit_month)
+    print(min_profit_month)
