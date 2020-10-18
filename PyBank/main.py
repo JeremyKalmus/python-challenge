@@ -6,7 +6,7 @@ import csv
 budget_data = os.path.join('Resources', 'budget_data.csv')
 
 #Open and read the CSV File
-with open(budget_data) as csvfile:
+with open(budget_data, 'r') as csvfile:
     #Split data on commas
     csvreader = csv.reader(csvfile, delimiter = ',')
     #create variable for counting the number of Months in the dataset
@@ -23,6 +23,9 @@ with open(budget_data) as csvfile:
     #Skip header row
     csv_header = next(csvreader, None)
 
+    #list for min/max
+    max_min_list = []
+
     #Perform actions on each row
     for row in csvreader:
         months_count += 1
@@ -34,26 +37,40 @@ with open(budget_data) as csvfile:
         running_profit_difference = running_profit_1 - running_profit_2
         running_profit.append(int(running_profit_difference))
 
+        #append values to max/min list
+        max_min_list.append(int(row[1]))
+
+        
 #finish up calculating running profit average, remove the first list item, sum all items in the list and divide by number of months    
     running_profit.pop(0)
     running_profit_total = sum(running_profit)    
     average_change = running_profit_total / (months_count - 1)
+    average_change = "{:.2f}".format(average_change)
 
 #greatest increase / decrease if statement
-    max_profit = int(max(running_profit))
-    min_profit = int(min(running_profit))
-    value = row[1]
+    max_profit = max(max_min_list)
+    min_profit = min(max_min_list)
+   
     max_profit_month = 'unknown'
     min_profit_month = 'unknown'
 
-    for row in csvreader: 
-        if value == max_profit:
-            max_profit_month = row[0]
-        elif value == min_profit:
+with open(budget_data, 'r') as csvfile:
+    #Split data on commas
+    csvreader = csv.reader(csvfile, delimiter = ',')
+    csv_header = next(csvreader, None)
+
+    for row in csvreader:
+        if int(row[1]) == max_profit:
+            max_profit_month  = row[0]
+        elif int(row[1]) == min_profit:
             min_profit_month = row[0]
     
-    print(months_count)
-    print(net_profit)
-    print(average_change)
-    print(max_profit_month)
-    print(min_profit_month)
+print('')    
+print('Financial Analysis')
+print('----------------------------')
+print(f'Total Months: {months_count}')
+print(f'Total: {net_profit}')
+print(f'Average Change: ${average_change}')
+print(f'Greatest Increase in Profits: {max_profit_month} (${max_profit})')
+print(f'Greatest Decrease in Profits: {min_profit_month} (${min_profit})')
+print('') 
